@@ -32,8 +32,8 @@ export class Login {
         this.api.login(this.loginForm.value).subscribe({
           next: (user) => {
             console.log('Login successful!', user);
-            // 3. Redirect to a dashboard or home page (we'll assume root for now)
-            this.router.navigate(['/']);
+            // 3. Redirect to dashboard
+            this.router.navigate(['/dashboard']);
           },
           error: (err) => {
             console.error('Login failed', err);
