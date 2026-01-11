@@ -1,18 +1,51 @@
-<div class="menu-container">
-  <h3>Weekly Menu (Starting: {{ menuData?.week_start_date }})</h3>
-
-  <div *ngIf="loading">Loading menu...</div>
-  <div *ngIf="error" class="error-msg">{{ error }}</div>
-
-  <div class="grid-layout" *ngIf="menuData">
+<div class="menu-container" *ngIf="menuData">
+  <div class="grid-layout">
     <div *ngFor="let day of menuData.daily_menus" class="day-card">
       <h4>{{ day.day_of_week | titlecase }}</h4>
-      <ul>
-        <li><strong>Soup:</strong> {{ day.soup?.name || 'N/A' }}</li>
-        <li><strong>Entree A:</strong> {{ day.entree_a?.name || 'N/A' }}</li>
-        <li><strong>Entree B:</strong> {{ day.entree_b?.name || 'N/A' }}</li>
-        <li><strong>Dessert:</strong> {{ day.dessert?.name || 'N/A' }}</li>
-      </ul>
+
+      <div class="menu-options">
+        <button
+          (click)="selectItem(day.id, 'soup', day.soup.id)"
+          [class.active]="selectedItems[day.id]['soup'] === day.soup.id"
+        >
+          Soup: {{ day.soup.name }}
+        </button>
+
+        <button
+          (click)="selectItem(day.id, 'entree_a', day.entree_a.id)"
+          [class.active]="selectedItems[day.id]['entree_a'] === day.entree_a.id"
+        >
+          A: {{ day.entree_a.name }}
+        </button>
+
+        <button
+          (click)="selectItem(day.id, 'entree_b', day.entree_b.id)"
+          [class.active]="selectedItems[day.id]['entree_b'] === day.entree_b.id"
+        >
+          B: {{ day.entree_b.name }}
+        </button>
+
+        <button
+          (click)="selectItem(day.id, 'dessert', day.dessert.id)"
+          [class.active]="selectedItems[day.id]['dessert'] === day.dessert.id"
+        >
+          Dessert: {{ day.dessert.name }}
+        </button>
+      </div>
     </div>
+  </div>
+
+  <div class="order-footer">
+    <label>
+      <input type="checkbox" [(ngModel)]="donateMeal" />
+      Donate one of my meals this week to someone in need
+    </label>
+    <br />
+    <label>
+      <input type="checkbox" [(ngModel)]="consentUnclaimed" />
+      I consent to donating my meal if I do not claim it
+    </label>
+    <br />
+    <button class="btn-submit" (click)="submitOrder()">Place Weekly Order</button>
   </div>
 </div>

@@ -42,3 +42,52 @@
   padding: 10px;
   border-radius: 4px;
 }
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  button {
+    background: white;
+    border: 1px solid #3498db;
+    color: #3498db;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.85rem;
+
+    &.active {
+      background: #3498db;
+      color: white;
+    }
+
+    &:hover:not(.active) {
+      background: #ebf5fb;
+    }
+  }
+}
+
+.order-footer {
+  margin-top: 30px;
+  padding: 20px;
+  background: #fdfefe;
+  border: 2px dashed #bdc3c7;
+  border-radius: 8px;
+
+  .btn-submit {
+    margin-top: 15px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background: #219150;
+    }
+  }
+}
