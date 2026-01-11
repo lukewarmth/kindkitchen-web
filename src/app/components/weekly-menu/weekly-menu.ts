@@ -40,7 +40,11 @@ export class WeeklyMenu implements OnInit {
   }
 
   selectItem(dayId: number, type: string, itemId: number) {
-    this.selectedItems[dayId][type] = itemId;
+    if (this.selectedItems[dayId][type] === itemId) {
+      delete this.selectedItems[dayId][type];
+    } else {
+      this.selectedItems[dayId][type] = itemId;
+    }
   }
 
   submitOrder() {
