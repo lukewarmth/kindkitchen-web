@@ -1,0 +1,13 @@
+<div class="history-container">
+  <h3>Your Past Orders</h3>
+  <div *ngIf="orders.length === 0">You haven't placed any orders yet.</div>
+
+  <div class="order-card" *ngFor="let order of orders">
+    <div class="order-header">
+      <span>Order #{{ order.id }}</span>
+      <span class="date">{{ order.created_at | date : 'mediumDate' }}</span>
+    </div>
+    <p>Items: {{ order.items.length }} selections made.</p>
+    <p *ngIf="order.donate_meal">❤️ You donated a meal this week!</p>
+  </div>
+</div>

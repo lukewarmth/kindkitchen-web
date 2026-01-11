@@ -31,6 +31,15 @@
   </header>
 
   <main>
+    <nav class="tab-nav">
+      <button (click)="view = 'menu'" [class.active]="view === 'menu'">Weekly Menu</button>
+      <button (click)="view = 'history'" [class.active]="view === 'history'">My Orders</button>
+    </nav>
+
+    <div [ngSwitch]="view">
+      <app-weekly-menu *ngSwitchCase="'menu'"></app-weekly-menu>
+      <app-order-history *ngSwitchCase="'history'"></app-order-history>
+    </div>
     <app-weekly-menu></app-weekly-menu>
   </main>
 </div>

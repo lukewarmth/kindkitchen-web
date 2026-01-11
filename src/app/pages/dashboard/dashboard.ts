@@ -13,6 +13,7 @@ import { WeeklyMenu } from '../../components/weekly-menu/weekly-menu';
 })
 export class Dashboard implements OnInit {
   user: any = null;
+  view: string = 'menu';
 
   constructor(private api: ApiService, private router: Router) {}
 

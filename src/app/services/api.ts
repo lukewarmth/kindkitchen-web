@@ -63,4 +63,11 @@ export class ApiService {
   placeOrder(orderData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/orders`, orderData);
   }
+
+  /**
+   * Get user's order history
+   */
+  getUserOrders(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/orders`);
+  }
 }
