@@ -26,14 +26,33 @@ export class WeeklyMenu implements OnInit {
   ngOnInit(): void {
     this.api.getWeeklyMenu().subscribe({
       next: (data) => {
+        const dayOrder = [
+          'monday',
+          'tuesday',
+          'wednesday',
+          'thursday',
+          'friday',
+          'saturday',
+          'sunday',
+        ];
+
+        // Sort the menus based on that order
+        data.daily_menus.sort((a: any, b: any) => {
+          return (
+            dayOrder.indexOf(a.day_of_week.toLowerCase()) -
+            dayOrder.indexOf(b.day_of_week.toLowerCase())
+          );
+        });
+
         this.menuData = data;
         this.loading = false;
+
         this.menuData.daily_menus.forEach((day: any) => {
           this.selectedItems[day.id] = {};
         });
       },
       error: (err) => {
-        this.error = 'No active menu found for this week.';
+        this.error = 'No active menu found.';
         this.loading = false;
       },
     });

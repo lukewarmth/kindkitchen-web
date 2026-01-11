@@ -1,51 +1,119 @@
-<div class="menu-container" *ngIf="menuData">
-  <div class="grid-layout">
-    <div *ngFor="let day of menuData.daily_menus" class="day-card">
-      <h4>{{ day.day_of_week | titlecase }}</h4>
+<div class="menu-container" *ngIf="menuData" style="max-width: 1200px; margin: 0 auto">
+  <div
+    class="menu-header"
+    style="margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px"
+  >
+    <h2 style="margin: 0; color: #2c3e50; font-size: 1.8rem">Weekly Menu</h2>
+    <p style="margin: 5px 0; color: #3498db; font-weight: bold; font-size: 1.1rem">
+      Week of {{ menuData.week_start_date | date : 'longDate' }}
+    </p>
+  </div>
 
-      <div class="menu-options">
+  <div
+    class="grid-layout"
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px"
+  >
+    <div
+      *ngFor="let day of menuData.daily_menus"
+      class="day-card"
+      style="
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      "
+    >
+      <h4
+        style="
+          text-transform: capitalize;
+          color: #2c3e50;
+          margin-top: 0;
+          border-bottom: 2px solid #ebf5fb;
+          padding-bottom: 8px;
+          margin-bottom: 15px;
+        "
+      >
+        {{ day.day_of_week }}
+      </h4>
+
+      <div class="menu-options" style="display: flex; flex-direction: column; gap: 10px">
         <button
           (click)="selectItem(day.id, 'soup', day.soup.id)"
           [class.active]="selectedItems[day.id]['soup'] === day.soup.id"
+          class="choice-btn"
         >
-          Soup: {{ day.soup.name }}
+          <span class="label">Soup:</span> {{ day.soup.name }}
         </button>
 
         <button
           (click)="selectItem(day.id, 'entree_a', day.entree_a.id)"
           [class.active]="selectedItems[day.id]['entree_a'] === day.entree_a.id"
+          class="choice-btn"
         >
-          A: {{ day.entree_a.name }}
+          <span class="label">A:</span> {{ day.entree_a.name }}
         </button>
 
         <button
           (click)="selectItem(day.id, 'entree_b', day.entree_b.id)"
           [class.active]="selectedItems[day.id]['entree_b'] === day.entree_b.id"
+          class="choice-btn"
         >
-          B: {{ day.entree_b.name }}
+          <span class="label">B:</span> {{ day.entree_b.name }}
         </button>
 
         <button
           (click)="selectItem(day.id, 'dessert', day.dessert.id)"
           [class.active]="selectedItems[day.id]['dessert'] === day.dessert.id"
+          class="choice-btn"
         >
-          Dessert: {{ day.dessert.name }}
+          <span class="label">Dessert:</span> {{ day.dessert.name }}
         </button>
       </div>
     </div>
   </div>
 
-  <div class="order-footer">
-    <label>
-      <input type="checkbox" [(ngModel)]="donateMeal" />
-      Donate one of my meals this week to someone in need
-    </label>
-    <br />
-    <label>
-      <input type="checkbox" [(ngModel)]="consentUnclaimed" />
-      I consent to donating my meal if I do not claim it
-    </label>
-    <br />
-    <button class="btn-submit" (click)="submitOrder()">Place Weekly Order</button>
+  <div
+    class="order-footer"
+    style="
+      margin-top: 40px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 12px;
+      padding: 25px;
+    "
+  >
+    <h4 style="margin-top: 0; color: #2c3e50">Donation & Options</h4>
+
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <label style="display: flex; align-items: center; gap: 10px; cursor: pointer">
+        <input type="checkbox" [(ngModel)]="donateMeal" style="width: 18px; height: 18px" />
+        <span>Donate one of my meals this week to someone in need</span>
+      </label>
+
+      <label style="display: flex; align-items: center; gap: 10px; cursor: pointer">
+        <input type="checkbox" [(ngModel)]="consentUnclaimed" style="width: 18px; height: 18px" />
+        <span>I consent to donating my meal if I do not claim it</span>
+      </label>
+    </div>
+
+    <button
+      (click)="submitOrder()"
+      style="
+        margin-top: 25px;
+        background: #27ae60;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        transition: background 0.2s;
+      "
+    >
+      Place Weekly Order
+    </button>
   </div>
 </div>

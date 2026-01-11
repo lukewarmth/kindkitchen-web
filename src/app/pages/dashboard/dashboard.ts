@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api';
 import { WeeklyMenu } from '../../components/weekly-menu/weekly-menu';
+import { OrderHistory } from '../../components/order-history/order-history';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, WeeklyMenu],
+  imports: [CommonModule, WeeklyMenu, OrderHistory],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
 })
