@@ -48,4 +48,19 @@ export class ApiService {
   getUser(): Observable<any> {
     return this.http.get(`${this.baseUrl}/user`);
   }
+
+  /**
+   * Get the weekly menu
+   */
+  getWeeklyMenu(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/current-menu`);
+  }
+
+  /**
+   * Submit an order
+   * @param orderData The order data to submit
+   */
+  placeOrder(orderData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/orders`, orderData);
+  }
 }
