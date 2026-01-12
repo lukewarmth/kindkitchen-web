@@ -32,7 +32,8 @@
       "
     >
       <span style="font-size: 1.1rem; font-weight: bold; color: #2c3e50"
-        >Order #{{ order.id }}</span
+        >Order #{{ order.id }} (Week of
+        {{ order.items[0]?.daily_menu?.weekly_menu?.week_start_date | date : 'mediumDate' }})</span
       >
       <span
         style="
@@ -43,7 +44,7 @@
           color: #7f8c8d;
         "
       >
-        {{ order.created_at | date : 'mediumDate' }}
+        Placed on {{ order.created_at | date : 'mediumDate' }}
       </span>
     </div>
 
@@ -66,10 +67,20 @@
 
         <div *ngIf="order.groupedItems[day].length > 0; else noOrder">
           <div
-            *ngFor="let foodName of order.groupedItems[day]"
-            style="font-size: 0.85rem; color: #333; margin-bottom: 2px"
+            *ngFor="let food of order.groupedItems[day]"
+            style="font-size: 0.85rem; color: #333; margin-bottom: 4px"
           >
-            • {{ foodName }}
+            <span
+              style="
+                font-weight: bold;
+                color: #7f8c8d;
+                font-size: 0.7rem;
+                text-transform: uppercase;
+              "
+            >
+              {{ food.type }}:
+            </span>
+            {{ food.name }}
           </div>
         </div>
 
