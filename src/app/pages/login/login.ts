@@ -8,7 +8,6 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
-  // We MUST import ReactiveFormsModule here to use forms
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
@@ -27,7 +26,7 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      // 1. Get the CSRF cookie first (required by Laravel Sanctum)
+      // 1. Get the CSRF cookie first
       this.api.getCsrfToken().subscribe(() => {
         // 2. Send login request
         this.api.login(this.loginForm.value).subscribe({
