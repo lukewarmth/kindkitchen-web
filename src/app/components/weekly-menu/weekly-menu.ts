@@ -16,6 +16,9 @@ export class WeeklyMenu implements OnInit {
   loading: boolean = true;
   error: string = '';
 
+  // Track the date currently being viewed
+  viewingDate: Date = new Date();
+
   selectedItems: { [key: number]: { [key: string]: number } } = {};
 
   donateMeal: boolean = false;
@@ -24,7 +27,17 @@ export class WeeklyMenu implements OnInit {
   constructor(private api: ApiService, private router: Router) {}
 
   ngOnInit(): void {
-    this.api.getWeeklyMenu().subscribe({
+    this.loadMenu(this.viewingDate);
+  }
+
+  loadMenu(date: Date): void {
+    this.loading = true;
+    this.error = '';
+
+    // Format date as YYYY-MM-DD for the backend API
+    const dateString = date.toISOString().split('T')[0];
+
+    this.api.getWeeklyMenu(dateString).subscribe({
       next: (data) => {
         const dayOrder = [
           'monday',
@@ -36,7 +49,7 @@ export class WeeklyMenu implements OnInit {
           'sunday',
         ];
 
-        // Sort the menus based on that order
+        // Sort the menus based on the fixed day order
         data.daily_menus.sort((a: any, b: any) => {
           return (
             dayOrder.indexOf(a.day_of_week.toLowerCase()) -
@@ -47,15 +60,37 @@ export class WeeklyMenu implements OnInit {
         this.menuData = data;
         this.loading = false;
 
+        // Reset and initialize selection object for this specific menu
+        this.selectedItems = {};
         this.menuData.daily_menus.forEach((day: any) => {
           this.selectedItems[day.id] = {};
         });
       },
       error: (err) => {
-        this.error = 'No active menu found.';
+        this.menuData = null;
+        this.error = 'No active menu found for this week.';
         this.loading = false;
       },
     });
+  }
+
+  /**
+   * Navigates the week by a specified number of days
+   * @param offset - usually -7 or 7
+   */
+  changeWeek(offset: number): void {
+    const newDate = new Date(this.viewingDate);
+    newDate.setDate(newDate.getDate() + offset);
+    this.viewingDate = newDate;
+    this.loadMenu(this.viewingDate);
+  }
+
+  /**
+   * Jumps back to the current week
+   */
+  goToday(): void {
+    this.viewingDate = new Date();
+    this.loadMenu(this.viewingDate);
   }
 
   selectItem(dayId: number, type: string, itemId: number) {
@@ -67,7 +102,6 @@ export class WeeklyMenu implements OnInit {
   }
 
   submitOrder() {
-    // Transform our local selection object into the format Laravel expects
     const itemsArray: any[] = [];
 
     Object.keys(this.selectedItems).forEach((dayId) => {
@@ -80,6 +114,11 @@ export class WeeklyMenu implements OnInit {
       });
     });
 
+    if (itemsArray.length === 0 && !this.donateMeal) {
+      alert('Please select at least one item or choose to donate your meals.');
+      return;
+    }
+
     const orderData = {
       donate_meal: this.donateMeal,
       consent_unclaimed_donation: this.consentUnclaimed,
@@ -89,7 +128,7 @@ export class WeeklyMenu implements OnInit {
     this.api.placeOrder(orderData).subscribe({
       next: (res) => {
         alert('Order placed successfully!');
-        this.router.navigate(['/dashboard']); // Refresh or redirect
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => alert('Error placing order. Please try again.'),
     });

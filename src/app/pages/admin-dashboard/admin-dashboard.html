@@ -1,114 +1,103 @@
-<div class="admin-wrapper" style="padding: 40px; max-width: 1000px; margin: 0 auto">
-  <h2
-    style="color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 30px"
-  >
-    Admin: Food Catalog Manager
-  </h2>
+<div class="admin-dashboard">
+  <header class="admin-header">
+    <h2>Admin Control Panel</h2>
+    <p>Manage the food catalog and plan upcoming weekly menus.</p>
+  </header>
 
-  <div
-    style="
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      margin-bottom: 40px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-    "
-  >
-    <h3 style="margin-top: 0; font-size: 1.1rem; color: #34495e">Add New Item</h3>
-    <div style="display: flex; gap: 15px; align-items: flex-end">
-      <div style="flex: 2">
-        <label style="display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px"
-          >Item Name</label
-        >
+  <section class="admin-card planner-section">
+    <div class="card-header">
+      <h3>📅 Weekly Menu Planner</h3>
+      <div class="date-picker-group">
+        <label for="week-start">Week Starting (Monday):</label>
         <input
-          [(ngModel)]="newItem.name"
-          placeholder="e.g. Lentil Soup"
-          style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px"
+          type="date"
+          id="week-start"
+          [(ngModel)]="newWeeklyMenu.week_start_date"
+          class="admin-input"
         />
       </div>
-
-      <div style="flex: 1">
-        <label style="display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px"
-          >Type</label
-        >
-        <select
-          [(ngModel)]="newItem.type"
-          style="
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            background: white;
-          "
-        >
-          <option value="soup">Soup</option>
-          <option value="entree">Entree</option>
-          <option value="dessert">Dessert</option>
-        </select>
-      </div>
-
-      <button
-        (click)="addFood()"
-        style="
-          background: #3498db;
-          color: white;
-          border: none;
-          padding: 11px 25px;
-          border-radius: 6px;
-          font-weight: bold;
-          cursor: pointer;
-        "
-      >
-        Add Item
-      </button>
     </div>
-  </div>
 
-  <div style="background: white; border: 1px solid #ddd; border-radius: 12px; overflow: hidden">
-    <table style="width: 100%; border-collapse: collapse; text-align: left">
+    <div class="week-grid">
+      <div *ngFor="let dayObj of newWeeklyMenu.days" class="day-box">
+        <h4>{{ dayObj.day_of_week | titlecase }}</h4>
+
+        <div class="select-group">
+          <label>Soup</label>
+          <select [(ngModel)]="dayObj.soup_item_id">
+            <option [ngValue]="null">Select Soup</option>
+            <option *ngFor="let item of soups" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+
+        <div class="select-group">
+          <label>Entree A</label>
+          <select [(ngModel)]="dayObj.entree_a_item_id">
+            <option [ngValue]="null">Select Entree A</option>
+            <option *ngFor="let item of entrees" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+
+        <div class="select-group">
+          <label>Entree B</label>
+          <select [(ngModel)]="dayObj.entree_b_item_id">
+            <option [ngValue]="null">Select Entree B</option>
+            <option *ngFor="let item of entrees" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+
+        <div class="select-group">
+          <label>Dessert</label>
+          <select [(ngModel)]="dayObj.dessert_item_id">
+            <option [ngValue]="null">Select Dessert</option>
+            <option *ngFor="let item of desserts" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="planner-actions">
+      <button (click)="saveWeeklyMenu()" class="btn-primary">Publish Weekly Menu</button>
+    </div>
+  </section>
+
+  <section class="admin-card catalog-section">
+    <h3>🍴 Food Catalog</h3>
+
+    <div class="add-item-bar">
+      <input
+        name="newItemName"
+        [(ngModel)]="newItem.name"
+        placeholder="Item Name"
+        class="admin-input"
+      />
+      <select [(ngModel)]="newItem.type" class="admin-input">
+        <option value="soup">Soup</option>
+        <option value="entree">Entree</option>
+        <option value="dessert">Dessert</option>
+      </select>
+      <button (click)="addFood()" class="btn-secondary">Add to Catalog</button>
+    </div>
+
+    <table class="admin-table">
       <thead>
-        <tr style="background: #f8f9fa; border-bottom: 2px solid #eee">
-          <th style="padding: 15px">Name</th>
-          <th style="padding: 15px">Type</th>
-          <th style="padding: 15px; text-align: right">Action</th>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of menuItems" style="border-bottom: 1px solid #f1f1f1">
-          <td style="padding: 15px; font-weight: 500">{{ item.name }}</td>
-          <td style="padding: 15px">
-            <span
-              [style.background]="
-                item.type === 'soup' ? '#e1f5fe' : item.type === 'entree' ? '#e8f5e9' : '#fff3e0'
-              "
-              style="
-                padding: 4px 10px;
-                border-radius: 20px;
-                font-size: 0.8rem;
-                font-weight: bold;
-                color: #444;
-              "
-            >
-              {{ item.type | titlecase }}
-            </span>
+        <tr *ngFor="let item of menuItems">
+          <td>{{ item.name }}</td>
+          <td>
+            <span class="badge" [ngClass]="item.type">{{ item.type }}</span>
           </td>
-          <td style="padding: 15px; text-align: right">
-            <button
-              (click)="removeFood(item.id)"
-              style="
-                color: #e74c3c;
-                background: none;
-                border: none;
-                cursor: pointer;
-                font-size: 0.9rem;
-              "
-            >
-              Delete
-            </button>
+          <td>
+            <button (click)="removeFood(item.id)" class="btn-delete">Archive</button>
           </td>
         </tr>
       </tbody>
     </table>
-  </div>
+  </section>
 </div>

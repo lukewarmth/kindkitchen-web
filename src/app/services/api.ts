@@ -50,13 +50,6 @@ export class ApiService {
   }
 
   /**
-   * Get the weekly menu
-   */
-  getWeeklyMenu(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/current-menu`);
-  }
-
-  /**
    * Submit an order
    * @param orderData The order data to submit
    */
@@ -83,5 +76,17 @@ export class ApiService {
   // Optional: Delete a food item (you'll need to add the destroy method in Laravel later)
   deleteMenuItem(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/admin/menu-items/${id}`);
+  }
+
+  // Create weekly menu
+  createWeeklyMenu(menuData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/admin/weekly-menus`, menuData);
+  }
+
+  // Get weekly menu by date (for admin view)
+  getWeeklyMenu(date?: string): Observable<any> {
+    let url = `${this.baseUrl}/current-menu`;
+    if (date) url += `?date=${date}`;
+    return this.http.get(url);
   }
 }

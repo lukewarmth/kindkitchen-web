@@ -1,15 +1,41 @@
-<div class="menu-container" *ngIf="menuData" style="max-width: 1200px; margin: 0 auto">
+<div class="menu-container" style="max-width: 1200px; margin: 0 auto">
   <div
     class="menu-header"
-    style="margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px"
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 15px;
+    "
   >
-    <h2 style="margin: 0; color: #2c3e50; font-size: 1.8rem">Weekly Menu</h2>
-    <p style="margin: 5px 0; color: #3498db; font-weight: bold; font-size: 1.1rem">
-      Week of {{ menuData.week_start_date | date : 'longDate' }}
-    </p>
+    <div>
+      <h2 style="margin: 0; color: #2c3e50; font-size: 1.8rem">Weekly Menu</h2>
+      <p
+        *ngIf="menuData"
+        style="margin: 5px 0; color: #3498db; font-weight: bold; font-size: 1.1rem"
+      >
+        Week of {{ menuData.week_start_date | date : 'longDate' }}
+      </p>
+      <p *ngIf="!menuData && !loading" style="margin: 5px 0; color: #e74c3c; font-weight: bold">
+        {{ error }}
+      </p>
+    </div>
+
+    <div class="week-nav" style="display: flex; gap: 10px; align-items: center">
+      <button (click)="changeWeek(-7)" class="nav-arrow-btn" title="Previous Week">&larr;</button>
+      <button (click)="goToday()" class="nav-today-btn">Today</button>
+      <button (click)="changeWeek(7)" class="nav-arrow-btn" title="Next Week">&rarr;</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" style="text-align: center; padding: 50px">
+    <p>Loading menu...</p>
   </div>
 
   <div
+    *ngIf="menuData && !loading"
     class="grid-layout"
     style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px"
   >
@@ -74,6 +100,7 @@
   </div>
 
   <div
+    *ngIf="menuData"
     class="order-footer"
     style="
       margin-top: 40px;
