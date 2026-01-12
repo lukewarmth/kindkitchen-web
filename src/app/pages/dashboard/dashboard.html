@@ -32,6 +32,10 @@
         <button (click)="view = 'history'" [class.active]="view === 'history'" class="nav-link">
           <span class="icon">📜</span> My Orders
         </button>
+
+        <button *ngIf="user?.role === 'admin'" (click)="view = 'admin'" class="nav-link">
+          <span class="icon">🛠️</span> Admin Panel
+        </button>
       </div>
     </nav>
 
@@ -48,6 +52,7 @@
       <div [ngSwitch]="view">
         <app-weekly-menu *ngSwitchCase="'menu'"></app-weekly-menu>
         <app-order-history *ngSwitchCase="'history'"></app-order-history>
+        <app-admin-dashboard *ngSwitchCase="'admin'"></app-admin-dashboard>
       </div>
     </main>
   </div>

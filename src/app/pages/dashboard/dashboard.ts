@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../services/api';
 import { WeeklyMenu } from '../../components/weekly-menu/weekly-menu';
 import { OrderHistory } from '../../components/order-history/order-history';
+import { AdminDashboard } from '../admin-dashboard/admin-dashboard';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, WeeklyMenu, OrderHistory],
+  imports: [CommonModule, WeeklyMenu, OrderHistory, AdminDashboard],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
 })

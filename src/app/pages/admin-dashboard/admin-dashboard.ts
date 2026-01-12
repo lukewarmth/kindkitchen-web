@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './admin-dashboard.html',
-  styleUrls: ['./admin-dashboard.scss']
+  styleUrls: ['./admin-dashboard.scss'],
 })
 export class AdminDashboard implements OnInit {
   menuItems: any[] = [];
-  
+
   // Default values for a new item
   newItem = {
     name: '',
     type: 'soup', // Default type
-    description: ''
+    description: '',
   };
 
   constructor(private api: ApiService) {}
@@ -27,8 +28,8 @@ export class AdminDashboard implements OnInit {
 
   loadItems() {
     this.api.getMenuItems().subscribe({
-      next: (data) => this.menuItems = data,
-      error: (err) => console.error('Error loading items', err)
+      next: (data) => (this.menuItems = data),
+      error: (err) => console.error('Error loading items', err),
     });
   }
 
@@ -42,7 +43,7 @@ export class AdminDashboard implements OnInit {
         // Refresh list
         this.loadItems();
       },
-      error: (err) => alert('Error: ' + err.error.message)
+      error: (err) => alert('Error: ' + err.error.message),
     });
   }
 }
