@@ -18,14 +18,12 @@ export class AdminDashboard implements OnInit {
   entrees: any[] = [];
   desserts: any[] = [];
 
-  // 1. YOUR ORIGINAL NEW ITEM OBJECT
   newItem = {
     name: '',
     type: 'soup',
     description: '',
   };
 
-  // 2. NEW: WEEKLY MENU OBJECT
   newWeeklyMenu = {
     week_start_date: '',
     days: [
@@ -100,7 +98,6 @@ export class AdminDashboard implements OnInit {
     });
   }
 
-  // 3. YOUR ORIGINAL ADD FOOD LOGIC
   addFood() {
     if (!this.newItem.name) return;
     this.api.createMenuItem(this.newItem).subscribe({
@@ -112,7 +109,6 @@ export class AdminDashboard implements OnInit {
     });
   }
 
-  // 4. YOUR ORIGINAL REMOVE FOOD (Now acts as "Archive" thanks to SoftDeletes)
   removeFood(itemId: number) {
     if (confirm('Are you sure you want to archive this item?')) {
       this.api.deleteMenuItem(itemId).subscribe({
@@ -122,7 +118,6 @@ export class AdminDashboard implements OnInit {
     }
   }
 
-  // 5. NEW: SAVE WEEKLY MENU LOGIC
   saveWeeklyMenu() {
     if (!this.newWeeklyMenu.week_start_date) {
       alert('Please select a start date');
@@ -131,7 +126,6 @@ export class AdminDashboard implements OnInit {
     this.api.createWeeklyMenu(this.newWeeklyMenu).subscribe({
       next: () => {
         alert('Weekly Menu Published Successfully!');
-        // Reset form optionally here
       },
       error: (err) => alert('Error creating menu: ' + err.error.message),
     });
