@@ -71,18 +71,17 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/orders`);
   }
 
-  // Get all available food items
+  // Add '/admin' to the path for these administrative routes
   getMenuItems(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/menu-items`);
+    return this.http.get<any[]>(`${this.baseUrl}/admin/menu-items`);
   }
 
-  // Create a new food item
   createMenuItem(itemData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/menu-items`, itemData);
+    return this.http.post(`${this.baseUrl}/admin/menu-items`, itemData);
   }
 
   // Optional: Delete a food item (you'll need to add the destroy method in Laravel later)
   deleteMenuItem(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/menu-items/${id}`);
+    return this.http.delete(`${this.baseUrl}/admin/menu-items/${id}`);
   }
 }

@@ -46,4 +46,11 @@ export class AdminDashboard implements OnInit {
       error: (err) => alert('Error: ' + err.error.message),
     });
   }
+
+  removeFood(itemId: number) {
+    this.api.deleteMenuItem(itemId).subscribe({
+      next: () => this.loadItems(),
+      error: (err) => alert('Error: ' + err.error.message),
+    });
+  }
 }
