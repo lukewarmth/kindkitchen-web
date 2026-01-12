@@ -33,7 +33,12 @@
           <span class="icon">📜</span> My Orders
         </button>
 
-        <button *ngIf="user?.role === 'admin'" (click)="view = 'admin'" class="nav-link">
+        <button
+          *ngIf="user?.role === 'admin'"
+          (click)="view = 'admin'"
+          [class.active]="view === 'admin'"
+          class="nav-link"
+        >
           <span class="icon">🛠️</span> Admin Panel
         </button>
       </div>
