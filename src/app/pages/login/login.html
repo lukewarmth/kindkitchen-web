@@ -1,23 +1,42 @@
-<div class="login-container">
-  <h2>Login to KindKitchen</h2>
-
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email" placeholder="admin@kindkitchen.com" />
+<div class="auth-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <h1 class="brand">Kind<span>Kitchen</span></h1>
+      <h2>Welcome Back</h2>
+      <p>Please log in to manage your weekly meals.</p>
     </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password" placeholder="********" />
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-wrapper">
+          <span class="icon">✉️</span>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="admin@kindkitchen.com"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <span class="icon">🔒</span>
+          <input id="password" type="password" formControlName="password" placeholder="********" />
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" [disabled]="!loginForm.valid" class="btn-login">Log In</button>
+    </form>
+
+    <div class="login-footer">
+      <p>Don't have an account? <a routerLink="/register">Register here</a></p>
     </div>
-
-    <div *ngIf="errorMessage" class="error">
-      {{ errorMessage }}
-    </div>
-
-    <button type="submit" [disabled]="!loginForm.valid">Log In</button>
-  </form>
-
-  <p>Don't have an account? <a href="/register">Register here</a></p>
+  </div>
 </div>

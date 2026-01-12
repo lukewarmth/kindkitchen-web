@@ -34,11 +34,14 @@ export class WeeklyMenu implements OnInit {
     this.loading = true;
     this.error = '';
 
-    // Format date as YYYY-MM-DD for the backend API
-    const dateString = date.toISOString().split('T')[0];
+    // Force local date format YYYY-MM-DD
+    const offset = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - offset * 60 * 1000);
+    const dateString = adjustedDate.toISOString().split('T')[0];
 
     this.api.getWeeklyMenu(dateString).subscribe({
       next: (data) => {
+        // Sorting logic
         const dayOrder = [
           'monday',
           'tuesday',
@@ -48,19 +51,18 @@ export class WeeklyMenu implements OnInit {
           'saturday',
           'sunday',
         ];
-
-        // Sort the menus based on the fixed day order
-        data.daily_menus.sort((a: any, b: any) => {
-          return (
-            dayOrder.indexOf(a.day_of_week.toLowerCase()) -
-            dayOrder.indexOf(b.day_of_week.toLowerCase())
+        if (data.daily_menus) {
+          data.daily_menus.sort(
+            (a: any, b: any) =>
+              dayOrder.indexOf(a.day_of_week.toLowerCase()) -
+              dayOrder.indexOf(b.day_of_week.toLowerCase())
           );
-        });
+        }
 
         this.menuData = data;
         this.loading = false;
 
-        // Reset and initialize selection object for this specific menu
+        // Reset selection objects
         this.selectedItems = {};
         this.menuData.daily_menus.forEach((day: any) => {
           this.selectedItems[day.id] = {};
@@ -68,7 +70,7 @@ export class WeeklyMenu implements OnInit {
       },
       error: (err) => {
         this.menuData = null;
-        this.error = 'No active menu found for this week.';
+        this.error = 'No menu scheduled for this period.';
         this.loading = false;
       },
     });

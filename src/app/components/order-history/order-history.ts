@@ -40,24 +40,32 @@ export class OrderHistory implements OnInit {
       'sunday',
     ];
     const groups: any = {};
-
-    daysOfWeek.forEach((day) => {
-      groups[day] = [];
-    });
+    daysOfWeek.forEach((day) => (groups[day] = []));
 
     items.forEach((item: any) => {
-      if (!item.daily_menu) return;
+      const dm = item.daily_menu;
+      if (!dm) return;
 
-      const dayName = item.daily_menu.day_of_week.toLowerCase();
-      const typeName = item.item_type; // e.g., 'entree_a'
+      const dayName = dm.day_of_week.toLowerCase();
+      const type = item.item_type; // e.g. 'entree_a'
 
-      // Debugging: uncomment the line below if it still doesn't work to see the names in the console
-      console.log(`Looking for ${typeName} in`, item.daily_menu);
+      // FALLBACK LOGIC: Try snake_case, then camelCase
+      // This solves the "missing name" issue if Laravel renamed your relationships
+      let foodObject = dm[type];
 
-      const foodName = item.daily_menu[typeName]?.name;
+      if (!foodObject) {
+        // Try converting entree_a to entreeA
+        const camelType = type.replace(/_([a-z])/g, (g: string) => g[1].toUpperCase());
+        foodObject = dm[camelType];
+      }
 
-      if (foodName && groups[dayName]) {
-        groups[dayName].push(foodName);
+      const foodName = foodObject?.name || 'Archived Item';
+
+      if (groups[dayName]) {
+        groups[dayName].push({
+          type: type.replace('_', ' ').toUpperCase(),
+          name: foodName,
+        });
       }
     });
 

@@ -13,10 +13,9 @@
     <div>
       <h2 style="margin: 0; color: #2c3e50; font-size: 1.8rem">Weekly Menu</h2>
       <p
-        *ngIf="menuData"
         style="margin: 5px 0; color: #3498db; font-weight: bold; font-size: 1.1rem"
       >
-        Week of {{ menuData.week_start_date | date : 'longDate' }}
+        Week of {{ viewingDate | date : 'longDate' }}
       </p>
       <p *ngIf="!menuData && !loading" style="margin: 5px 0; color: #e74c3c; font-weight: bold">
         {{ error }}
@@ -64,37 +63,50 @@
       </h4>
 
       <div class="menu-options" style="display: flex; flex-direction: column; gap: 10px">
-        <button
-          (click)="selectItem(day.id, 'soup', day.soup.id)"
-          [class.active]="selectedItems[day.id]['soup'] === day.soup.id"
-          class="choice-btn"
-        >
-          <span class="label">Soup:</span> {{ day.soup.name }}
-        </button>
+        <div class="menu-options" style="display: flex; flex-direction: column; gap: 10px">
+          <button
+            *ngIf="day.soup"
+            (click)="selectItem(day.id, 'soup', day.soup.id)"
+            [class.active]="selectedItems[day.id]?.['soup'] === day.soup.id"
+            class="choice-btn"
+          >
+            <span class="label">Soup:</span> {{ day.soup?.name }}
+          </button>
 
-        <button
-          (click)="selectItem(day.id, 'entree_a', day.entree_a.id)"
-          [class.active]="selectedItems[day.id]['entree_a'] === day.entree_a.id"
-          class="choice-btn"
-        >
-          <span class="label">A:</span> {{ day.entree_a.name }}
-        </button>
+          <button
+            *ngIf="day.entree_a"
+            (click)="selectItem(day.id, 'entree_a', day.entree_a.id)"
+            [class.active]="selectedItems[day.id]?.['entree_a'] === day.entree_a.id"
+            class="choice-btn"
+          >
+            <span class="label">A:</span> {{ day.entree_a?.name }}
+          </button>
 
-        <button
-          (click)="selectItem(day.id, 'entree_b', day.entree_b.id)"
-          [class.active]="selectedItems[day.id]['entree_b'] === day.entree_b.id"
-          class="choice-btn"
-        >
-          <span class="label">B:</span> {{ day.entree_b.name }}
-        </button>
+          <button
+            *ngIf="day.entree_b"
+            (click)="selectItem(day.id, 'entree_b', day.entree_b.id)"
+            [class.active]="selectedItems[day.id]?.['entree_b'] === day.entree_b.id"
+            class="choice-btn"
+          >
+            <span class="label">B:</span> {{ day.entree_b?.name }}
+          </button>
 
-        <button
-          (click)="selectItem(day.id, 'dessert', day.dessert.id)"
-          [class.active]="selectedItems[day.id]['dessert'] === day.dessert.id"
-          class="choice-btn"
-        >
-          <span class="label">Dessert:</span> {{ day.dessert.name }}
-        </button>
+          <button
+            *ngIf="day.dessert"
+            (click)="selectItem(day.id, 'dessert', day.dessert.id)"
+            [class.active]="selectedItems[day.id]?.['dessert'] === day.dessert.id"
+            class="choice-btn"
+          >
+            <span class="label">Dessert:</span> {{ day.dessert?.name }}
+          </button>
+
+          <p
+            *ngIf="!day.soup && !day.entree_a && !day.entree_b && !day.dessert"
+            style="font-size: 0.8rem; color: #bdc3c7; font-style: italic; text-align: center"
+          >
+            No items scheduled
+          </p>
+        </div>
       </div>
     </div>
   </div>
